@@ -21,7 +21,13 @@ public class DriveTrain extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  WPI_VictorSPX victor = RobotMap.intakeMotor;
+
+  WPI_VictorSPX frontLeftDrive = RobotMap.frontLeftDrive;
+  WPI_VictorSPX frontRightDrive = RobotMap.frontRightDrive;
+  WPI_VictorSPX backLeftDrive = RobotMap.backLeftDrive;
+  WPI_VictorSPX backRightDrive = RobotMap.backRightDrive;
+  WPI_VictorSPX intakeMotor = RobotMap.intakeMotor;
+  
 
   @Override
   public void initDefaultCommand() {
@@ -29,15 +35,18 @@ public class DriveTrain extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
-  public void in(double x) {
-      victor.set(ControlMode.PercentOutput, x);
+ public void in(double x) {
+  /*frontLeftDrive.set(ControlMode.PercentOutput, x);
+  frontRightDrive.set(ControlMode.PercentOutput, x);
+  backLeftDrive.set(ControlMode.PercentOutput, x);
+  backRightDrive.set(ControlMode.PercentOutput, x);*/
   }
-
+/*
   public void out(double x) {
     victor.set(ControlMode.PercentOutput, x);
   }
 
   public void stop() {
     victor.set(ControlMode.Current, 0);
-  }
+  }*/
 }

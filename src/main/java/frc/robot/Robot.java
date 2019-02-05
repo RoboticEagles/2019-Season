@@ -139,13 +139,16 @@ public class Robot extends TimedRobot {
 
     pov = povRight.get();
 
-    if (povRight.get() || povLeft.get()) {
+    /*if (povRight.get() || povLeft.get()) {
       intakeSystem.set(pov? 0.55 : -0.55);
     }
 
     else {
       intakeSystem.set(0);
-    }
+    }*/
+    double joystickYValue = j.getY();
+    intakeSystem.set(joystickYValue);
+
   }
 
   /**
