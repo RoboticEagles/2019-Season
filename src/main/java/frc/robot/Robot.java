@@ -11,7 +11,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.RobotMap;
-
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.buttons.POVButton;
@@ -37,9 +37,13 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
 
   boolean pov;
+  double slider;
+  double jY;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
+
+  Compressor compressor = new Compressor();
 
   Joystick j = new Joystick(0);
   POVButton povRight = new POVButton(j, 0);
@@ -139,15 +143,10 @@ public class Robot extends TimedRobot {
 
     pov = povRight.get();
 
-    /*if (povRight.get() || povLeft.get()) {
-      intakeSystem.set(pov? 0.55 : -0.55);
-    }
-
-    else {
-      intakeSystem.set(0);
-    }*/
-    double joystickYValue = j.getY();
-    intakeSystem.set(joystickYValue);
+    slider = ((j.getThrottle() * -1) + 1) / 2;
+    jY = j.getY();
+    intakeSystem.set(jY);
+    driveTrain.set(jY * slider);
 
   }
 

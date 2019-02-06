@@ -35,11 +35,11 @@ public class DriveTrain extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
- public void in(double x) {
-  /*frontLeftDrive.set(ControlMode.PercentOutput, x);
+ public void set(double x) {
+  frontLeftDrive.set(ControlMode.PercentOutput, -x);
   frontRightDrive.set(ControlMode.PercentOutput, x);
-  backLeftDrive.set(ControlMode.PercentOutput, x);
-  backRightDrive.set(ControlMode.PercentOutput, x);*/
+  backLeftDrive.set(ControlMode.PercentOutput, -x);
+  backRightDrive.set(ControlMode.PercentOutput, x);
   }
 /*
   public void out(double x) {
