@@ -12,8 +12,10 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -43,7 +45,9 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  Compressor compressor = new Compressor();
+  Compressor compressor = new Compressor(0);
+
+  DoubleSolenoid testSolenoid = new DoubleSolenoid(0, 0, 1);
 
   Joystick j = new Joystick(0);
   POVButton povRight = new POVButton(j, 0);
@@ -59,6 +63,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", new AutoCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
+
+    compressor.start();
+    compressor.setClosedLoopControl(true);
   }
 
   /**
@@ -145,6 +152,15 @@ public class Robot extends TimedRobot {
 
     slider = ((j.getThrottle() * -1) + 1) / 2;
     jY = j.getY();
+
+    if (j.getRawButton(1)) {
+      testSolenoid.set(Value.kForward);
+    }
+
+    else if (j.getRawButton(2)) {
+      testSolenoid.set(Value.kReverse);
+    }
+
     intakeSystem.set(jY);
     driveTrain.set(jY * slider);
 
