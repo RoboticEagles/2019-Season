@@ -7,24 +7,20 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
-import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.buttons.POVButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import frc.robot.subsystems.*;
-
-import frc.robot.commands.*;
+import frc.robot.commands.AutoCommand;
+import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.IntakeSystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -40,7 +36,7 @@ public class Robot extends TimedRobot {
 
   boolean pov;
   double slider;
-  double jY;
+  double joystickY;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -59,6 +55,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    CameraServer.getInstance().startAutomaticCapture();
     m_oi = new OI();
     m_chooser.setDefaultOption("Default Auto", new AutoCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
@@ -145,13 +142,14 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
+
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
 
     pov = povRight.get();
 
     slider = ((j.getThrottle() * -1) + 1) / 2;
-    jY = j.getY();
+    joystickY = j.getY();
 
     if (j.getRawButton(1)) {
       testSolenoid.set(Value.kForward);
@@ -161,8 +159,8 @@ public class Robot extends TimedRobot {
       testSolenoid.set(Value.kReverse);
     }
 
-    intakeSystem.set(jY);
-    driveTrain.set(jY * slider);
+    intakeSystem.set(joystickY);
+    driveTrain.set(joystickY * slider);
 
   }
 
