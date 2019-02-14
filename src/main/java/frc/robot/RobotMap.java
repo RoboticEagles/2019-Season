@@ -9,6 +9,10 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -22,11 +26,18 @@ public class RobotMap {
   // public static int rightMotor = 2;
 
   public static WPI_VictorSPX intakeMotor = new WPI_VictorSPX(2);
+
+  public static WPI_VictorSPX shooterRightMotor = new WPI_VictorSPX(8);
+  public static WPI_VictorSPX shooterLeftMotor = new WPI_VictorSPX(9);
+
   public static WPI_VictorSPX frontLeftDrive = new WPI_VictorSPX(7);
   public static WPI_VictorSPX frontRightDrive = new WPI_VictorSPX(5);
   public static WPI_VictorSPX backLeftDrive = new WPI_VictorSPX(4);
   public static WPI_VictorSPX backRightDrive = new WPI_VictorSPX(6);
-  
+
+  public static SpeedControllerGroup leftDrive = new SpeedControllerGroup(frontLeftDrive, backLeftDrive);
+  public static SpeedControllerGroup rightDrive = new SpeedControllerGroup(frontRightDrive, backRightDrive);
+  public static DifferentialDrive drive = new DifferentialDrive(leftDrive, rightDrive);
 
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:

@@ -7,6 +7,10 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+
+import edu.wpi.first.networktables.*;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -21,6 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.IntakeSystem;
+import frc.robot.subsystems.ShooterSystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,18 +37,21 @@ import frc.robot.subsystems.IntakeSystem;
 public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
   public static IntakeSystem intakeSystem = new IntakeSystem();
+  public static ShooterSystem shooterSystem = new ShooterSystem();
   public static OI m_oi;
 
   boolean pov;
   double slider;
   double joystickY;
 
+  NetworkTableEntry xEntry;
+  NetworkTableEntry yEntry;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  Compressor compressor = new Compressor(0);
-
-  DoubleSolenoid testSolenoid = new DoubleSolenoid(0, 0, 1);
+  //Compressor compressor = new Compressor(0);
+  //DoubleSolenoid testSolenoid = new DoubleSolenoid(0, 0, 1);
 
   Joystick j = new Joystick(0);
   POVButton povRight = new POVButton(j, 0);
@@ -55,14 +63,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(640, 480);
+
+    NetworkTableInstance inst = NetworkTableInstance.getDefault();
+    NetworkTable table = inst.getTable("datatable");
+    xEntry = table.getEntry("X");
+    yEntry = table.getEntry("Y");
+
     m_oi = new OI();
     m_chooser.setDefaultOption("Default Auto", new AutoCommand());
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
 
-    compressor.start();
-    compressor.setClosedLoopControl(true);
+    //compressor.start();
+    //compressor.setClosedLoopControl(true);
   }
 
   /**
@@ -149,19 +164,22 @@ public class Robot extends TimedRobot {
     pov = povRight.get();
 
     slider = ((j.getThrottle() * -1) + 1) / 2;
-    joystickY = j.getY();
-
+    //joystickY = j.getY();
+/*
     if (j.getRawButton(1)) {
       testSolenoid.set(Value.kForward);
     }
 
     else if (j.getRawButton(2)) {
       testSolenoid.set(Value.kReverse);
+    }*/
+
+    //intakeSystem.set(joystickY);
+    driveTrain.set(j, slider);
+    
+    if (j.getRawButton(2)) {
+      shooterSystem.set(slider);
     }
-
-    intakeSystem.set(joystickY);
-    driveTrain.set(joystickY * slider);
-
   }
 
   /**
