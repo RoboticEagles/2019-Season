@@ -180,6 +180,9 @@ public class Robot extends TimedRobot {
     if (j.getRawButton(2)) {
       shooterSystem.set(slider);
     }
+    else {
+      shooterSystem.stop();
+    }
   }
 
   /**

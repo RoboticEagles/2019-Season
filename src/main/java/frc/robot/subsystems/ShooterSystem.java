@@ -29,7 +29,12 @@ public class ShooterSystem extends Subsystem {
   }
 
   public void set(double slider) {
-    shooterLeftMotor.set(1);
-    shooterRightMotor.set(-1);
+    shooterLeftMotor.set(-1 * slider);
+    shooterRightMotor.set(1 * slider);
+  }
+
+  public void stop() {
+    shooterLeftMotor.set(0);
+    shooterRightMotor.set(0);
   }
 }

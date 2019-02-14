@@ -43,7 +43,7 @@ public class DriveTrain extends Subsystem {
  public void set(Joystick d, double slider) {
   //backLeftDrive.setInverted(true);
   //frontLeftDrive.setInverted(true);
-  drive.arcadeDrive(d.getY() * slider, d.getX());
+  drive.arcadeDrive(d.getY() * slider, d.getX() * 0.5 * slider);
   /*frontLeftDrive.set(ControlMode.PercentOutput, -x);
   frontRightDrive.set(ControlMode.PercentOutput, x);
   backLeftDrive.set(ControlMode.PercentOutput, -x);
