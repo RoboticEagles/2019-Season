@@ -25,9 +25,9 @@ public class RobotMap {
   // public static int leftMotor = 1;
   // public static int rightMotor = 2;
 
-  public static WPI_VictorSPX intakeMotor = new WPI_VictorSPX(2);
+  public static WPI_VictorSPX intakeMotor = new WPI_VictorSPX(8);
 
-  public static WPI_VictorSPX shooterRightMotor = new WPI_VictorSPX(8);
+  public static WPI_VictorSPX shooterRightMotor = new WPI_VictorSPX(2);
   public static WPI_VictorSPX shooterLeftMotor = new WPI_VictorSPX(9);
 
   public static WPI_VictorSPX frontLeftDrive = new WPI_VictorSPX(7);

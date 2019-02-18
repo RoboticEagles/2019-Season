@@ -176,6 +176,14 @@ public class Robot extends TimedRobot {
 
     //intakeSystem.set(joystickY);
     driveTrain.set(j, slider);
+
+    if (j.getRawButton(3)) {
+      intakeSystem.set(1);
+    }
+
+    else {
+      intakeSystem.set(0);
+    }
     
     if (j.getRawButton(2)) {
       shooterSystem.set(slider);

@@ -33,6 +33,6 @@ public class IntakeSystem extends Subsystem {
   }
 
   public void set(double x) {
-      intakeMotor.set(ControlMode.PercentOutput, -x);
+      intakeMotor.set(x);
   }
 }

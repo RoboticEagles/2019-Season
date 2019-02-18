@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -29,8 +30,8 @@ public class ShooterSystem extends Subsystem {
   }
 
   public void set(double slider) {
-    shooterLeftMotor.set(-1 * slider);
-    shooterRightMotor.set(1 * slider);
+    shooterLeftMotor.set(ControlMode.PercentOutput, 100);
+    shooterRightMotor.set(ControlMode.PercentOutput, -100);
   }
 
   public void stop() {
