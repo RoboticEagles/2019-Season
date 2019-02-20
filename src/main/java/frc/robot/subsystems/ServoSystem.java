@@ -7,20 +7,20 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.Subsystem;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.*;
-
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Joystick;
 
 /**
  * Add your docs here.
  */
-public class Pneumatics extends Subsystem {
+public class ServoSystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
+  Servo servoLeft = RobotMap.servoLeft;
+  Servo servoRight = RobotMap.servoRight;
 
   @Override
   public void initDefaultCommand() {
@@ -28,15 +28,13 @@ public class Pneumatics extends Subsystem {
     // setDefaultCommand(new MySpecialCommand());
   }
 
- public void set(double x) {
-  
+  public void set(Joystick j) {
+	if(j.getRawButton(9)){
+     servoLeft.setAngle(1);
+     servoRight.setAngle(0);
+    } else{
+      servoLeft.setAngle(0);
+      servoRight.setAngle(1);
+    }
   }
-/*
-  public void out(double x) {
-    victor.set(ControlMode.PercentOutput, x);
-  }
-
-  public void stop() {
-    victor.set(ControlMode.Current, 0);
-  }*/
 }

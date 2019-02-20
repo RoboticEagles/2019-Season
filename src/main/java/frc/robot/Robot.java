@@ -7,8 +7,13 @@
 
 package frc.robot;
 
-import edu.wpi.cscore.UsbCamera;
+import org.opencv.core.Mat;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.MjpegServer;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource;
 import edu.wpi.first.networktables.*;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.CameraServer;
@@ -26,6 +31,7 @@ import frc.robot.commands.AutoCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.IntakeSystem;
 import frc.robot.subsystems.ShooterSystem;
+import frc.robot.subsystems.PneumaticsSystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -38,9 +44,18 @@ public class Robot extends TimedRobot {
   public static DriveTrain driveTrain = new DriveTrain();
   public static IntakeSystem intakeSystem = new IntakeSystem();
   public static ShooterSystem shooterSystem = new ShooterSystem();
+  public static PneumaticsSystem pneumaticsSystem = new PneumaticsSystem();
   public static OI m_oi;
 
+  DoubleSolenoid intakeSolenoid = RobotMap.intakeSolenoid;
+  DoubleSolenoid hexagonSolenoid = RobotMap.lowSolenoid;
+  DoubleSolenoid hatchSolenoid = RobotMap.highSolenoid;
+
   boolean pov;
+  boolean intake;
+  boolean hexagon;
+  boolean hatch;
+
   double slider;
   double joystickY;
 
@@ -50,8 +65,7 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  //Compressor compressor = new Compressor(0);
-  //DoubleSolenoid testSolenoid = new DoubleSolenoid(0, 0, 1);
+  Compressor compressor = new Compressor(0);
 
   Joystick j = new Joystick(0);
   POVButton povRight = new POVButton(j, 0);
@@ -63,8 +77,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
-    camera.setResolution(640, 480);
+    //UsbCamera camera = new UsbCamera("camera0", 0);
+    //MjpegServer server = new MjpegServer("server0", 1180);
+    //CameraServer.getInstance().startAutomaticCapture(camera);
 
     NetworkTableInstance inst = NetworkTableInstance.getDefault();
     NetworkTable table = inst.getTable("datatable");
@@ -76,8 +91,8 @@ public class Robot extends TimedRobot {
     // chooser.addOption("My Auto", new MyAutoCommand());
     SmartDashboard.putData("Auto mode", m_chooser);
 
-    //compressor.start();
-    //compressor.setClosedLoopControl(true);
+    compressor.start();
+    compressor.setClosedLoopControl(true);
   }
 
   /**
@@ -164,25 +179,30 @@ public class Robot extends TimedRobot {
     pov = povRight.get();
 
     slider = ((j.getThrottle() * -1) + 1) / 2;
-    //joystickY = j.getY();
-/*
-    if (j.getRawButton(1)) {
-      testSolenoid.set(Value.kForward);
+    
+    if (j.getRawButtonPressed(3)) {
+      intake = !intake;
+      pneumaticsSystem.intakeSet(intake);
     }
 
-    else if (j.getRawButton(2)) {
-      testSolenoid.set(Value.kReverse);
-    }*/
+    if (j.getRawButtonPressed(4)) {
+      hexagon = !hexagon;
+      pneumaticsSystem.hexagonSet(hexagon);
+    }
 
-    //intakeSystem.set(joystickY);
+    if (j.getRawButtonPressed(5)) {
+      hatch = !hatch;
+      pneumaticsSystem.hatchSet(hatch);
+    }
+
     driveTrain.set(j, slider);
 
-    if (j.getRawButton(3)) {
-      intakeSystem.set(1);
+    if (j.getRawButton(1)) {
+      intakeSystem.set(slider);
     }
 
     else {
-      intakeSystem.set(0);
+      intakeSystem.stop();
     }
     
     if (j.getRawButton(2)) {
@@ -191,6 +211,11 @@ public class Robot extends TimedRobot {
     else {
       shooterSystem.stop();
     }
+
+    SmartDashboard.putNumber("slider:", slider);
+    SmartDashboard.putBoolean("intake:", (intakeSolenoid.get() == Value.kForward) ? true : false);
+    SmartDashboard.putBoolean("hexagon:", (hexagonSolenoid.get() == Value.kForward) ? true : false);
+    SmartDashboard.putBoolean("hatch:", (hatchSolenoid.get() == Value.kForward) ? true : false);
   }
 
   /**

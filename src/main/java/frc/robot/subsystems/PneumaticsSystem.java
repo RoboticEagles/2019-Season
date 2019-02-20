@@ -7,36 +7,45 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.*;
 
-import frc.robot.Robot;
 import frc.robot.RobotMap;
-import frc.robot.commands.SetMotor;
 
 /**
  * Add your docs here.
  */
-public class IntakeSystem extends Subsystem {
+public class PneumaticsSystem extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  WPI_VictorSPX intakeMotor = RobotMap.intakeMotor;
+  DoubleSolenoid intakeSolenoid = RobotMap.intakeSolenoid;
+  DoubleSolenoid hexagonSolenoid = RobotMap.lowSolenoid;
+  DoubleSolenoid hatchSolenoid = RobotMap.highSolenoid;
+
 
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
-    setDefaultCommand(null);
   }
 
-  public void set(double slider) {
-    intakeMotor.set(1);
+  public void intakeSet(boolean x) {
+    DoubleSolenoid.Value y = x ? Value.kForward : Value.kReverse;
+    intakeSolenoid.set(y);
   }
 
-  public void stop() {
-    intakeMotor.set(0);
+  public void hexagonSet(boolean x) {
+    DoubleSolenoid.Value y = x ? Value.kForward : Value.kReverse;
+    hexagonSolenoid.set(y);
+  }
+
+  public void hatchSet(boolean x) {
+    DoubleSolenoid.Value y = x ? Value.kForward : Value.kReverse;
+    hatchSolenoid.set(y);
   }
 }

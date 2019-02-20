@@ -9,6 +9,8 @@ package frc.robot;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
@@ -25,6 +27,9 @@ public class RobotMap {
   // public static int leftMotor = 1;
   // public static int rightMotor = 2;
 
+  public static Servo servoLeft = new Servo(0);
+  public static Servo servoRight = new Servo(1);
+
   public static WPI_VictorSPX intakeMotor = new WPI_VictorSPX(8);
 
   public static WPI_VictorSPX shooterRightMotor = new WPI_VictorSPX(2);
@@ -38,6 +43,10 @@ public class RobotMap {
   public static SpeedControllerGroup leftDrive = new SpeedControllerGroup(frontLeftDrive, backLeftDrive);
   public static SpeedControllerGroup rightDrive = new SpeedControllerGroup(frontRightDrive, backRightDrive);
   public static DifferentialDrive drive = new DifferentialDrive(leftDrive, rightDrive);
+
+  public static DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0, 1);
+  public static DoubleSolenoid lowSolenoid = new DoubleSolenoid(2, 3);
+  public static DoubleSolenoid highSolenoid = new DoubleSolenoid(6, 7);
 
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:
